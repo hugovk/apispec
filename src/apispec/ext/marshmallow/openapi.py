@@ -14,7 +14,7 @@ import marshmallow
 from marshmallow.utils import is_collection
 
 from apispec.compat import iteritems
-from apispec.utils import OpenAPIVersion, build_reference
+from apispec.utils import build_reference
 from apispec.exceptions import APISpecError
 from .field_converter import FieldConverterMixin
 from .common import (
@@ -41,7 +41,7 @@ __location_map__ = {
 }
 
 
-class OpenAPIConverter(FieldConverterMixin):
+class OpenAPIConverterMixin(FieldConverterMixin):
     """Converter generating OpenAPI specification from Marshmallow schemas and fields
 
     :param str|OpenAPIVersion openapi_version: The OpenAPI version to use.
@@ -53,14 +53,6 @@ class OpenAPIConverter(FieldConverterMixin):
     :param APISpec spec: An initalied spec. Nested schemas will be added to the
         spec
     """
-
-    def __init__(self, openapi_version, schema_name_resolver, spec):
-        self.openapi_version = OpenAPIVersion(openapi_version)
-        self.schema_name_resolver = schema_name_resolver
-        self.spec = spec
-        self.init_attribute_functions()
-        # Schema references
-        self.refs = {}
 
     @staticmethod
     def _observed_name(field, name):
