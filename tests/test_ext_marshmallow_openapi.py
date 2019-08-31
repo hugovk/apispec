@@ -12,6 +12,10 @@ from .utils import get_schemas, build_ref
 
 
 class TestMarshmallowFieldToOpenAPI:
+    @pytest.mark.skipif(
+        MARSHMALLOW_VERSION_INFO[0] >= 3,
+        reason="Feature unsupported with marshmallow 3",
+    )
     def test_fields_with_missing_load(self, openapi):
         field_dict = {"field": fields.Str(default="foo", missing="bar")}
         res = openapi.fields2parameters(field_dict, default_in="query")

@@ -6,6 +6,7 @@ from marshmallow import fields, validate
 
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec.ext.marshmallow.openapi import MARSHMALLOW_VERSION_INFO
 
 from .schemas import CategorySchema, CustomList, CustomStringField, CustomIntegerField
 from .utils import build_ref
@@ -79,12 +80,18 @@ def test_field_with_description(spec_fixture):
     assert res["description"] == "a username"
 
 
+@pytest.mark.skipif(
+    MARSHMALLOW_VERSION_INFO[0] >= 3, reason="Feature unsupported with marshmallow 3"
+)
 def test_field_with_missing(spec_fixture):
     field = fields.Str(default="foo", missing="bar")
     res = spec_fixture.openapi.field2property(field)
     assert res["default"] == "bar"
 
 
+@pytest.mark.skipif(
+    MARSHMALLOW_VERSION_INFO[0] >= 3, reason="Feature unsupported with marshmallow 3"
+)
 def test_field_with_boolean_false_missing(spec_fixture):
     field = fields.Boolean(default=None, missing=False)
     res = spec_fixture.openapi.field2property(field)
@@ -130,7 +137,8 @@ def test_only_allows_valid_properties_in_metadata(spec_fixture):
         not_valid="lol",
     )
     res = spec_fixture.openapi.field2property(field)
-    assert res["default"] == field.missing
+    if MARSHMALLOW_VERSION_INFO[0] < 3:
+        assert res["default"] == field.missing
     assert "description" in res
     assert "enum" in res
     assert "allOf" in res

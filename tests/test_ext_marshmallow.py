@@ -827,7 +827,8 @@ class TestSchemaWithDefaultValues:
         spec.components.schema("DefaultValuesSchema", schema=DefaultValuesSchema)
         definitions = get_schemas(spec)
         props = definitions["DefaultValuesSchema"]["properties"]
-        assert props["number_auto_default"]["default"] == 12
+        if MARSHMALLOW_VERSION_INFO[0] < 3:
+            assert props["number_auto_default"]["default"] == 12
         assert props["number_manual_default"]["default"] == 42
         assert "default" not in props["string_callable_default"]
         assert props["string_manual_default"]["default"] == "Manual"
