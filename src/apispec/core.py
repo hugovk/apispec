@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Core apispec classes and functions."""
 from collections import OrderedDict
 from copy import deepcopy
@@ -116,7 +115,7 @@ def clean_operations(operations, openapi_major_version):
             operation["responses"] = responses
 
 
-class Components(object):
+class Components:
     """Stores OpenAPI components
 
     Components are top-level fields in OAS v2.
@@ -252,7 +251,7 @@ class Components(object):
         return self
 
 
-class APISpec(object):
+class APISpec:
     """Stores metadata that describes a RESTful API using the OpenAPI specification.
 
     :param str title: API title
